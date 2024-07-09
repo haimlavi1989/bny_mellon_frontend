@@ -1,0 +1,18 @@
+.navbar-nav .nav-link.active {
+  border-color: transparent;
+  border-bottom-color: red;
+  border-style: solid;
+  border-width: 0.9px;
+  margin: -1.5px;
+}
+
+.contactMe {
+  list-style: none;
+  display: inline-flex;
+  height: 20px;
+}
+
+.contactMe img {
+  width: 25px;
+  height: 24px;
+}
