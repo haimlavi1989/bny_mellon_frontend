@@ -1,19 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { UsersService } from './../users.service'
+import { Subscription } from 'rxjs/internal/Subscription';
 
 @Component({
   selector: 'app-add-or-modify',
   templateUrl: './add-or-modify.component.html',
   styleUrl: './add-or-modify.component.scss'
 })
-export class AddOrModifyComponent implements OnInit {
+export class AddOrModifyComponent implements OnInit, OnDestroy {
   form: any;
   id = '';
   isAddMode = false;
   loading = false;
   submitted = false;
+  // Subscription
+  private routeSubscription: Subscription | undefined;
 
   constructor(
       private formBuilder: FormBuilder,
@@ -23,28 +26,42 @@ export class AddOrModifyComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-      this.id = this.route.snapshot.params['id'];
-      console.log(this.route.snapshot.params)
       this.isAddMode = !this.id;
-      
-      this.form = this.formBuilder.group({
-          // title: ['', Validators.required],
-          name: ['', Validators.required],
-          // firstName: ['', Validators.required],
-          // lastName: ['', Validators.required],
-          email: ['', [Validators.required, Validators.email]],
-          role: ['', Validators.required],
-          password: ['123456'],
-          passwordConfirm: ['123456']
-      }, {
+      this.routeSubscription = this.route.params.subscribe(params => {
+        console.log(params)
+        this.id = params['id'];
+        this.isAddMode = !this.id;
+        this.initializeForm();
+        if (!this.isAddMode) {
+          this.loadUserData();
+        }
       });
-
-      if (!this.isAddMode) {
-          const userData = this.usersService.getUser(this.id);
-          this.form.patchValue(userData)
-      }
   }
 
+  loadUserData() {
+    this.usersService.getUser(this.id).subscribe({
+        next: (userData: any) => {
+          this.form.patchValue(userData);
+        },
+        error: (error) => {
+            this.loading = false;
+            console.error('Error load user data:', error);
+        }
+    });
+  }
+    
+  initializeForm() {
+     this.form = this.formBuilder.group({
+        // title: ['', Validators.required],
+        name: ['', Validators.required],
+        // firstName: ['', Validators.required],
+        // lastName: ['', Validators.required],
+        email: ['', [Validators.required, Validators.email]],
+        role: ['', Validators.required],
+        password: ['123456'],
+        passwordConfirm: ['123456']
+      }, {});
+  }
   onSubmit() {
 
       this.submitted = true;
@@ -95,5 +112,11 @@ export class AddOrModifyComponent implements OnInit {
             console.error('Error update user:', error);
         }
     });
+  }
+
+  ngOnDestroy() {
+    if (this.routeSubscription) {
+      this.routeSubscription.unsubscribe();
+    }
   }
 }

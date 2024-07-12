@@ -59,12 +59,27 @@ export class UsersService {
     );
   }
 
-  getUser(id: string) {
-    if (!this.users) {
-      return;
+  getUser(id: string): Observable<User> {
+    // Check if the user is already cached
+    const cachedUser = this.users.find(user => user.id === id);
+    if (cachedUser) {
+      return of(cachedUser);
     }
-    const userIndex = this.users.findIndex(user => user.id === id);
-    return this.users[userIndex];
+
+    // If user is not cached, fetch all users and find the user
+    return this.getUsers().pipe(
+      map(() => {
+        const user = this.users.find(user => user.id === id);
+        if (!user) {
+          throw new Error(`User with ID ${id} not found.`);
+        }
+        return user;
+      }),
+      catchError((error) => {
+        console.error(error);
+        return throwError(() => new Error(error));
+      })
+    );
   }
 
   createUser(userResource: User): Observable<User> {
