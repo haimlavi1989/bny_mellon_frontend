@@ -8,6 +8,8 @@
         </ul>
     </a>
 
+
+
     <!-- Button for small screens to toggle navigation -->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" (click)="handleToggle()">
@@ -17,13 +19,26 @@
     <!-- Collapsible navigation menu -->
     <div class="collapse navbar-collapse" id="navbarSupportedContent" [ngClass]="{'show': menuToggle}">
       <ul class="navbar-nav ml-auto">
-            <a class="nav-link" routerLink="/home" routerLinkActive="active">
-              first
+            <a class="nav-link" routerLink="/users" routerLinkActive="active">
+              users
             </a>
-            <span> | </span>
+            <div *ngIf="usersLength">
+              <span
+                class="badge bg-danger"
+                style="
+                    height: 30px;
+                    padding: 15.2px 7.8px;
+                    font-size: 27px;
+                    border-radius: 26px;
+                    transform: perspective(0px) translate(-7px) rotate(0deg) scale(0.50);
+                    transform-origin: top;
+                    padding-top: 0.2px;
+                ">{{usersLength}}</span>
+             </div>
+            <!-- <span> | </span>
             <a class="nav-link" routerLink="/second" routerLinkActive="active">
               second
-            </a>
+            </a> -->
       </ul>
     </div>
   </div>

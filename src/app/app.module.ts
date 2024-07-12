@@ -15,6 +15,7 @@ import { ErrorInterceptor } from './feature/shared/erorrs/error-interceptor';
 import { CommonModule } from '@angular/common';
 import { HomeComponent } from './feature/home/home.component';
 import { DatePipe } from '@angular/common';
+import { UsersService } from './feature/users/users.service'
 
 @NgModule({ declarations: [
         AppComponent,
@@ -29,6 +30,7 @@ import { DatePipe } from '@angular/common';
         CommonModule,
         SharedModule], providers: [
         DatePipe,
+        UsersService,
         // { provide: RECAPTCHA_V3_SITE_KEY, useValue: environment.recaptcha_key },
         { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

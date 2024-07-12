@@ -5,6 +5,8 @@ import { RegisterComponent } from './feature/register/register.component';
 import { AuthGuard } from "./feature/auth/auth.guard";
 import {HomeComponent} from "./feature/home/home.component";
 
+const usersModule = () => import('./feature/users/users.module').then(x => x.UsersModule);
+
  const routes: Routes = [
     { path : 'login', component : LoginComponent },
     { path : 'register', component : RegisterComponent },
@@ -15,7 +17,8 @@ import {HomeComponent} from "./feature/home/home.component";
     //   path: 'graphs',
     //   loadChildren: () => import('./feature/name/name.module').then(m => m.nameModule)
     // },
-    { path: '', redirectTo: 'home', pathMatch: 'full' },
+    { path: 'users', loadChildren: usersModule },
+    { path: '', redirectTo: 'users', pathMatch: 'full' },
     { path: '**', redirectTo: 'home' }
   ];
 

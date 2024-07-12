@@ -1,0 +1,14 @@
+
+<td>{{user.name}}</td>
+<td>{{user.email}}</td>
+<td>{{user.role}}</td>
+<td style="white-space: nowrap">
+    <a routerLink="edit/{{user.id}}" class="btn btn-sm btn-primary me-2">Edit</a>
+    <button (click)="deleteUser(user.id)" class="btn btn-sm btn-danger btn-delete-user"
+        [disabled]="isLoadingUser">
+        <span *ngIf="isLoadingUser" class="spinner-border spinner-border-sm"></span>
+        <span *ngIf="!isLoadingUser">Delete</span>
+    </button>
+</td>     
+
+
